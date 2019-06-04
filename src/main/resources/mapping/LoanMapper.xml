@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loan.dao.LoanMapper">
+  <resultMap id="BaseResultMap" type="com.loan.dataobject.Loan">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="lender" jdbcType="INTEGER" property="lender" />
+    <result column="borrower" jdbcType="INTEGER" property="borrower" />
+    <result column="borrwwing_time" jdbcType="DATE" property="borrwwingTime" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="money" jdbcType="DECIMAL" property="money" />
+    <result column="day_rate" jdbcType="DECIMAL" property="dayRate" />
+    <result column="method" jdbcType="TINYINT" property="method" />
+    <result column="deadline" jdbcType="INTEGER" property="deadline" />
+    <result column="repayment_day" jdbcType="SMALLINT" property="repaymentDay" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, lender, borrower, borrwwing_time, status, money, day_rate, method, deadline, 
+    repayment_day
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from loan
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from loan
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.loan.dataobject.Loan">
+    insert into loan (id, lender, borrower, 
+      borrwwing_time, status, money, 
+      day_rate, method, deadline, 
+      repayment_day)
+    values (#{id,jdbcType=INTEGER}, #{lender,jdbcType=INTEGER}, #{borrower,jdbcType=INTEGER}, 
+      #{borrwwingTime,jdbcType=DATE}, #{status,jdbcType=TINYINT}, #{money,jdbcType=DECIMAL}, 
+      #{dayRate,jdbcType=DECIMAL}, #{method,jdbcType=TINYINT}, #{deadline,jdbcType=INTEGER}, 
+      #{repaymentDay,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.loan.dataobject.Loan">
+    insert into loan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="lender != null">
+        lender,
+      </if>
+      <if test="borrower != null">
+        borrower,
+      </if>
+      <if test="borrwwingTime != null">
+        borrwwing_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+      <if test="dayRate != null">
+        day_rate,
+      </if>
+      <if test="method != null">
+        method,
+      </if>
+      <if test="deadline != null">
+        deadline,
+      </if>
+      <if test="repaymentDay != null">
+        repayment_day,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="lender != null">
+        #{lender,jdbcType=INTEGER},
+      </if>
+      <if test="borrower != null">
+        #{borrower,jdbcType=INTEGER},
+      </if>
+      <if test="borrwwingTime != null">
+        #{borrwwingTime,jdbcType=DATE},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="dayRate != null">
+        #{dayRate,jdbcType=DECIMAL},
+      </if>
+      <if test="method != null">
+        #{method,jdbcType=TINYINT},
+      </if>
+      <if test="deadline != null">
+        #{deadline,jdbcType=INTEGER},
+      </if>
+      <if test="repaymentDay != null">
+        #{repaymentDay,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.loan.dataobject.Loan">
+    update loan
+    <set>
+      <if test="lender != null">
+        lender = #{lender,jdbcType=INTEGER},
+      </if>
+      <if test="borrower != null">
+        borrower = #{borrower,jdbcType=INTEGER},
+      </if>
+      <if test="borrwwingTime != null">
+        borrwwing_time = #{borrwwingTime,jdbcType=DATE},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="money != null">
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="dayRate != null">
+        day_rate = #{dayRate,jdbcType=DECIMAL},
+      </if>
+      <if test="method != null">
+        method = #{method,jdbcType=TINYINT},
+      </if>
+      <if test="deadline != null">
+        deadline = #{deadline,jdbcType=INTEGER},
+      </if>
+      <if test="repaymentDay != null">
+        repayment_day = #{repaymentDay,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.loan.dataobject.Loan">
+    update loan
+    set lender = #{lender,jdbcType=INTEGER},
+      borrower = #{borrower,jdbcType=INTEGER},
+      borrwwing_time = #{borrwwingTime,jdbcType=DATE},
+      status = #{status,jdbcType=TINYINT},
+      money = #{money,jdbcType=DECIMAL},
+      day_rate = #{dayRate,jdbcType=DECIMAL},
+      method = #{method,jdbcType=TINYINT},
+      deadline = #{deadline,jdbcType=INTEGER},
+      repayment_day = #{repaymentDay,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

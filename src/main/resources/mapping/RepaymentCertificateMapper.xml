@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loan.dao.RepaymentCertificateMapper">
+  <resultMap id="BaseResultMap" type="com.loan.dataobject.RepaymentCertificate">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="repayment_id" jdbcType="INTEGER" property="repaymentId" />
+    <result column="photo_url" jdbcType="VARCHAR" property="photoUrl" />
+    <result column="method" jdbcType="VARCHAR" property="method" />
+    <result column="lender_account" jdbcType="VARCHAR" property="lenderAccount" />
+    <result column="borrower_account" jdbcType="VARCHAR" property="borrowerAccount" />
+    <result column="transfer_url" jdbcType="VARCHAR" property="transferUrl" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, repayment_id, photo_url, method, lender_account, borrower_account, transfer_url
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from repayment_certificate
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from repayment_certificate
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.loan.dataobject.RepaymentCertificate">
+    insert into repayment_certificate (id, repayment_id, photo_url, 
+      method, lender_account, borrower_account, 
+      transfer_url)
+    values (#{id,jdbcType=INTEGER}, #{repaymentId,jdbcType=INTEGER}, #{photoUrl,jdbcType=VARCHAR}, 
+      #{method,jdbcType=VARCHAR}, #{lenderAccount,jdbcType=VARCHAR}, #{borrowerAccount,jdbcType=VARCHAR}, 
+      #{transferUrl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.loan.dataobject.RepaymentCertificate">
+    insert into repayment_certificate
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="repaymentId != null">
+        repayment_id,
+      </if>
+      <if test="photoUrl != null">
+        photo_url,
+      </if>
+      <if test="method != null">
+        method,
+      </if>
+      <if test="lenderAccount != null">
+        lender_account,
+      </if>
+      <if test="borrowerAccount != null">
+        borrower_account,
+      </if>
+      <if test="transferUrl != null">
+        transfer_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="repaymentId != null">
+        #{repaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="photoUrl != null">
+        #{photoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null">
+        #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="lenderAccount != null">
+        #{lenderAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="borrowerAccount != null">
+        #{borrowerAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="transferUrl != null">
+        #{transferUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.loan.dataobject.RepaymentCertificate">
+    update repayment_certificate
+    <set>
+      <if test="repaymentId != null">
+        repayment_id = #{repaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="photoUrl != null">
+        photo_url = #{photoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null">
+        method = #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="lenderAccount != null">
+        lender_account = #{lenderAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="borrowerAccount != null">
+        borrower_account = #{borrowerAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="transferUrl != null">
+        transfer_url = #{transferUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.loan.dataobject.RepaymentCertificate">
+    update repayment_certificate
+    set repayment_id = #{repaymentId,jdbcType=INTEGER},
+      photo_url = #{photoUrl,jdbcType=VARCHAR},
+      method = #{method,jdbcType=VARCHAR},
+      lender_account = #{lenderAccount,jdbcType=VARCHAR},
+      borrower_account = #{borrowerAccount,jdbcType=VARCHAR},
+      transfer_url = #{transferUrl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loan.dao.CreditsMapper">
+  <resultMap id="BaseResultMap" type="com.loan.dataobject.Credits">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="client" jdbcType="INTEGER" property="client" />
+    <result column="value" jdbcType="INTEGER" property="value" />
+    <result column="time" jdbcType="DATE" property="time" />
+    <result column="desc" jdbcType="VARCHAR" property="desc" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, client, value, time, desc
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from credits
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from credits
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.loan.dataobject.Credits">
+    insert into credits (id, client, value, 
+      time, desc)
+    values (#{id,jdbcType=INTEGER}, #{client,jdbcType=INTEGER}, #{value,jdbcType=INTEGER}, 
+      #{time,jdbcType=DATE}, #{desc,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.loan.dataobject.Credits">
+    insert into credits
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="client != null">
+        client,
+      </if>
+      <if test="value != null">
+        value,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="desc != null">
+        desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="client != null">
+        #{client,jdbcType=INTEGER},
+      </if>
+      <if test="value != null">
+        #{value,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=DATE},
+      </if>
+      <if test="desc != null">
+        #{desc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.loan.dataobject.Credits">
+    update credits
+    <set>
+      <if test="client != null">
+        client = #{client,jdbcType=INTEGER},
+      </if>
+      <if test="value != null">
+        value = #{value,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=DATE},
+      </if>
+      <if test="desc != null">
+        desc = #{desc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.loan.dataobject.Credits">
+    update credits
+    set client = #{client,jdbcType=INTEGER},
+      value = #{value,jdbcType=INTEGER},
+      time = #{time,jdbcType=DATE},
+      desc = #{desc,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loan.dao.RepaymentMapper">
+  <resultMap id="BaseResultMap" type="com.loan.dataobject.Repayment">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="borrower_id" jdbcType="INTEGER" property="borrowerId" />
+    <result column="lender_id" jdbcType="INTEGER" property="lenderId" />
+    <result column="time" jdbcType="DATE" property="time" />
+    <result column="loanid" jdbcType="INTEGER" property="loanid" />
+    <result column="money" jdbcType="DECIMAL" property="money" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, borrower_id, lender_id, time, loanid, money
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from repayment
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from repayment
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.loan.dataobject.Repayment">
+    insert into repayment (id, borrower_id, lender_id, 
+      time, loanid, money)
+    values (#{id,jdbcType=INTEGER}, #{borrowerId,jdbcType=INTEGER}, #{lenderId,jdbcType=INTEGER}, 
+      #{time,jdbcType=DATE}, #{loanid,jdbcType=INTEGER}, #{money,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.loan.dataobject.Repayment">
+    insert into repayment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="borrowerId != null">
+        borrower_id,
+      </if>
+      <if test="lenderId != null">
+        lender_id,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="loanid != null">
+        loanid,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="borrowerId != null">
+        #{borrowerId,jdbcType=INTEGER},
+      </if>
+      <if test="lenderId != null">
+        #{lenderId,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=DATE},
+      </if>
+      <if test="loanid != null">
+        #{loanid,jdbcType=INTEGER},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.loan.dataobject.Repayment">
+    update repayment
+    <set>
+      <if test="borrowerId != null">
+        borrower_id = #{borrowerId,jdbcType=INTEGER},
+      </if>
+      <if test="lenderId != null">
+        lender_id = #{lenderId,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=DATE},
+      </if>
+      <if test="loanid != null">
+        loanid = #{loanid,jdbcType=INTEGER},
+      </if>
+      <if test="money != null">
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.loan.dataobject.Repayment">
+    update repayment
+    set borrower_id = #{borrowerId,jdbcType=INTEGER},
+      lender_id = #{lenderId,jdbcType=INTEGER},
+      time = #{time,jdbcType=DATE},
+      loanid = #{loanid,jdbcType=INTEGER},
+      money = #{money,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

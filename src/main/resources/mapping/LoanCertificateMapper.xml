@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loan.dao.LoanCertificateMapper">
+  <resultMap id="BaseResultMap" type="com.loan.dataobject.LoanCertificate">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="loan_id" jdbcType="INTEGER" property="loanId" />
+    <result column="photo_url" jdbcType="VARCHAR" property="photoUrl" />
+    <result column="transfer_voucher_url" jdbcType="VARCHAR" property="transferVoucherUrl" />
+    <result column="recording_certificate" jdbcType="VARCHAR" property="recordingCertificate" />
+    <result column="video_certificate" jdbcType="VARCHAR" property="videoCertificate" />
+    <result column="transfer_method" jdbcType="VARCHAR" property="transferMethod" />
+    <result column="lender_account" jdbcType="VARCHAR" property="lenderAccount" />
+    <result column="borrwer_account" jdbcType="VARCHAR" property="borrwerAccount" />
+    <result column="address_book_url" jdbcType="VARCHAR" property="addressBookUrl" />
+    <result column="borrowing" jdbcType="VARCHAR" property="borrowing" />
+    <result column="borrowing_id" jdbcType="VARCHAR" property="borrowingId" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.loan.dataobject.LoanCertificate">
+    <result column="use" jdbcType="LONGVARCHAR" property="use" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, loan_id, photo_url, transfer_voucher_url, recording_certificate, video_certificate, 
+    transfer_method, lender_account, borrwer_account, address_book_url, borrowing, borrowing_id
+  </sql>
+  <sql id="Blob_Column_List">
+    use
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from loan_certificate
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from loan_certificate
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.loan.dataobject.LoanCertificate">
+    insert into loan_certificate (id, loan_id, photo_url, 
+      transfer_voucher_url, recording_certificate, 
+      video_certificate, transfer_method, lender_account, 
+      borrwer_account, address_book_url, borrowing, 
+      borrowing_id, use)
+    values (#{id,jdbcType=INTEGER}, #{loanId,jdbcType=INTEGER}, #{photoUrl,jdbcType=VARCHAR}, 
+      #{transferVoucherUrl,jdbcType=VARCHAR}, #{recordingCertificate,jdbcType=VARCHAR}, 
+      #{videoCertificate,jdbcType=VARCHAR}, #{transferMethod,jdbcType=VARCHAR}, #{lenderAccount,jdbcType=VARCHAR}, 
+      #{borrwerAccount,jdbcType=VARCHAR}, #{addressBookUrl,jdbcType=VARCHAR}, #{borrowing,jdbcType=VARCHAR}, 
+      #{borrowingId,jdbcType=VARCHAR}, #{use,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.loan.dataobject.LoanCertificate">
+    insert into loan_certificate
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="loanId != null">
+        loan_id,
+      </if>
+      <if test="photoUrl != null">
+        photo_url,
+      </if>
+      <if test="transferVoucherUrl != null">
+        transfer_voucher_url,
+      </if>
+      <if test="recordingCertificate != null">
+        recording_certificate,
+      </if>
+      <if test="videoCertificate != null">
+        video_certificate,
+      </if>
+      <if test="transferMethod != null">
+        transfer_method,
+      </if>
+      <if test="lenderAccount != null">
+        lender_account,
+      </if>
+      <if test="borrwerAccount != null">
+        borrwer_account,
+      </if>
+      <if test="addressBookUrl != null">
+        address_book_url,
+      </if>
+      <if test="borrowing != null">
+        borrowing,
+      </if>
+      <if test="borrowingId != null">
+        borrowing_id,
+      </if>
+      <if test="use != null">
+        use,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="loanId != null">
+        #{loanId,jdbcType=INTEGER},
+      </if>
+      <if test="photoUrl != null">
+        #{photoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="transferVoucherUrl != null">
+        #{transferVoucherUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="recordingCertificate != null">
+        #{recordingCertificate,jdbcType=VARCHAR},
+      </if>
+      <if test="videoCertificate != null">
+        #{videoCertificate,jdbcType=VARCHAR},
+      </if>
+      <if test="transferMethod != null">
+        #{transferMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="lenderAccount != null">
+        #{lenderAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="borrwerAccount != null">
+        #{borrwerAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="addressBookUrl != null">
+        #{addressBookUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="borrowing != null">
+        #{borrowing,jdbcType=VARCHAR},
+      </if>
+      <if test="borrowingId != null">
+        #{borrowingId,jdbcType=VARCHAR},
+      </if>
+      <if test="use != null">
+        #{use,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.loan.dataobject.LoanCertificate">
+    update loan_certificate
+    <set>
+      <if test="loanId != null">
+        loan_id = #{loanId,jdbcType=INTEGER},
+      </if>
+      <if test="photoUrl != null">
+        photo_url = #{photoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="transferVoucherUrl != null">
+        transfer_voucher_url = #{transferVoucherUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="recordingCertificate != null">
+        recording_certificate = #{recordingCertificate,jdbcType=VARCHAR},
+      </if>
+      <if test="videoCertificate != null">
+        video_certificate = #{videoCertificate,jdbcType=VARCHAR},
+      </if>
+      <if test="transferMethod != null">
+        transfer_method = #{transferMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="lenderAccount != null">
+        lender_account = #{lenderAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="borrwerAccount != null">
+        borrwer_account = #{borrwerAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="addressBookUrl != null">
+        address_book_url = #{addressBookUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="borrowing != null">
+        borrowing = #{borrowing,jdbcType=VARCHAR},
+      </if>
+      <if test="borrowingId != null">
+        borrowing_id = #{borrowingId,jdbcType=VARCHAR},
+      </if>
+      <if test="use != null">
+        use = #{use,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.loan.dataobject.LoanCertificate">
+    update loan_certificate
+    set loan_id = #{loanId,jdbcType=INTEGER},
+      photo_url = #{photoUrl,jdbcType=VARCHAR},
+      transfer_voucher_url = #{transferVoucherUrl,jdbcType=VARCHAR},
+      recording_certificate = #{recordingCertificate,jdbcType=VARCHAR},
+      video_certificate = #{videoCertificate,jdbcType=VARCHAR},
+      transfer_method = #{transferMethod,jdbcType=VARCHAR},
+      lender_account = #{lenderAccount,jdbcType=VARCHAR},
+      borrwer_account = #{borrwerAccount,jdbcType=VARCHAR},
+      address_book_url = #{addressBookUrl,jdbcType=VARCHAR},
+      borrowing = #{borrowing,jdbcType=VARCHAR},
+      borrowing_id = #{borrowingId,jdbcType=VARCHAR},
+      use = #{use,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.loan.dataobject.LoanCertificate">
+    update loan_certificate
+    set loan_id = #{loanId,jdbcType=INTEGER},
+      photo_url = #{photoUrl,jdbcType=VARCHAR},
+      transfer_voucher_url = #{transferVoucherUrl,jdbcType=VARCHAR},
+      recording_certificate = #{recordingCertificate,jdbcType=VARCHAR},
+      video_certificate = #{videoCertificate,jdbcType=VARCHAR},
+      transfer_method = #{transferMethod,jdbcType=VARCHAR},
+      lender_account = #{lenderAccount,jdbcType=VARCHAR},
+      borrwer_account = #{borrwerAccount,jdbcType=VARCHAR},
+      address_book_url = #{addressBookUrl,jdbcType=VARCHAR},
+      borrowing = #{borrowing,jdbcType=VARCHAR},
+      borrowing_id = #{borrowingId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
