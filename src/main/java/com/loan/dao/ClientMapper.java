@@ -18,4 +18,10 @@ public interface ClientMapper {
     int updateByPrimaryKey(Client record);
 
     List<Integer>selectId();
+    // 通过id查找姓名。
+    String selectName(Integer id);
+
+    List<Client> selectByMaxIdAndLimit(Integer maxId,Integer limit);
+    // 通过select count(id)查询总条数。
+    Integer selectCountId();
 }

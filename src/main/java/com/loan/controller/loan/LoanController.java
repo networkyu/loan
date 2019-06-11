@@ -2,7 +2,6 @@ package com.loan.controller.loan;
 
 import com.loan.error.BussinessException;
 import com.loan.error.EmBussinessError;
-import com.loan.model.client.ClientModel;
 import com.loan.model.loan.LoanModel;
 import com.loan.response.CommonReturnType;
 import com.loan.service.client.ClientService;
@@ -19,6 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * 借款功能
@@ -74,12 +74,14 @@ public class LoanController {
         return CommonReturnType.create(null);
     }
 
-    public static Date strToDate(String strDate) {
+    public Date strToDate(String strDate) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         ParsePosition pos = new ParsePosition(0);
-        Date strtodate = formatter.parse(strDate, pos);
-        return strtodate;
+        formatter.setTimeZone(TimeZone.getTimeZone("CST"));
+        Date date = formatter.parse(strDate, pos);
+        return date ;
     }
+
 
 
 }

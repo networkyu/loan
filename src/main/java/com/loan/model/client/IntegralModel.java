@@ -3,6 +3,7 @@ package com.loan.model.client;
 import lombok.Data;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.util.Date;
 @Data
 @ToString
@@ -16,5 +17,6 @@ public class IntegralModel {
     private Integer client;
 
     private Integer enterValue;
+
 
 }

@@ -18,12 +18,24 @@
     where id = #{id,jdbcType=INTEGER}
   </select>
   <!--通过id查询out_value的值-->
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectOutValueByClient" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     select
-    <include refid="Base_Column_List" />
+      sum(out_value)
     from repayment_integral
-    where client = #{id,jdbcType=INTEGER}
+    where client = #{client,jdbcType=INTEGER}
   </select>
+    <select id="selectEnterValueByClient" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select
+        sum(enter_value)
+        from repayment_integral
+        where client = #{client,jdbcType=INTEGER}
+    </select>
+    <select id="selectValueMapByClient" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+        select
+        sum(enter_value),sum(out_value)
+        from repayment_integral
+        where client = #{client,jdbcType=INTEGER}
+    </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from repayment_integral
     where id = #{id,jdbcType=INTEGER}
