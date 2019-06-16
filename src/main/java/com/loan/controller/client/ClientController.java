@@ -1,5 +1,7 @@
 package com.loan.controller.client;
 
+import com.loan.controller.BaseController;
+import com.loan.controller.PaginationData;
 import com.loan.controller.client.viewobject.ClientPaginationVO;
 import com.loan.controller.client.viewobject.ClientVO;
 import com.loan.controller.client.viewobject.IntegralVO;
@@ -25,7 +27,7 @@ import java.security.NoSuchAlgorithmException;
 @Controller
 @RequestMapping("/client")
 @CrossOrigin(allowCredentials = "true",allowedHeaders = "*")
-public class ClientController {
+public class ClientController extends BaseController {
 
     @Autowired
     private ValidatorImpl validator ;
@@ -120,6 +122,27 @@ public class ClientController {
         }
         return clientVOS;
     }
+    /**
+     * 返回给客户预览模型数据
+     * @param page 通过limt对所有数据进行分页。返回分页后的第几页的数据。
+     * @param limit 每页显示的数据。
+     */
+    @RequestMapping(value = "clientpreviews",method = {RequestMethod.GET})
+    @ResponseBody
+    public CommonReturnType clientPreviews(@RequestParam(name = "page",required = false) Integer page,@RequestParam(name = "limit") Integer limit){
+        PaginationData paginationData = new PaginationData();
+        // 首先获取总条数。
+        Integer total = clientService.clientSum();
+        // 设置第几页
+        if (page==null||page==0){
+            page = 1;
+        }
+        // 需要返回的数据是ClientPreviewVO
+        paginationData.setSum(total);
+        paginationData.setPage(page);
+        return CommonReturnType.create(paginationData);
+    }
+
 
 
 

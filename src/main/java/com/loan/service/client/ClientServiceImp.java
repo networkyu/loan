@@ -1,10 +1,14 @@
 package com.loan.service.client;
 
+import com.loan.controller.client.viewobject.ClientPreviewVO;
+import com.loan.controller.client.viewobject.ClientVO;
 import com.loan.dao.ClientMapper;
 import com.loan.dao.RepaymentIntegralMapper;
 import com.loan.dataobject.Client;
+import com.loan.dataobject.Loan;
 import com.loan.model.client.ClientModel;
 import com.loan.model.client.IntegralModel;
+import com.loan.service.loan.LoanService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +27,9 @@ public class ClientServiceImp implements ClientService {
 
     @Autowired
     RepaymentIntegralMapper repaymentIntegralMapper;
+
+    @Autowired
+    LoanService loanService;
 
     @Override
     public boolean addClient(ClientModel clientModel) {
@@ -107,5 +114,51 @@ public class ClientServiceImp implements ClientService {
             clientModels[i] = this.convertFromClient(clients.get(i));
         }
         return clientModels;
+    }
+
+    @Override
+    public ClientModel[] getClientModelsByPageAndLimit(Integer page, Integer limit) {
+        // 首先验证一下页面是否超出范围
+        Integer total = clientSum();
+        if (page > Math.ceil(total / limit)){
+            page = (int)Math.ceil(total/limit);
+        }
+        List<Client> clients = clientMapper.selectByStartRowAndLimit((page-1)*limit,limit);
+        ClientModel[] clientModels = new ClientModel[clients.size()];
+        for (int i=0;i<clients.size();i++){
+            clientModels[i] = this.convertFromClient(clients.get(i));
+        }
+        return clientModels;
+    }
+
+    @Override
+    public ClientPreviewVO[] getClientVos(Integer page, Integer limit) {
+        Integer total = clientSum();
+        if (page > Math.ceil(total / limit)){
+            page = (int)Math.ceil(total/limit);
+        }
+        List<Client> clients = clientMapper.selectByStartRowAndLimit((page-1)*limit,limit);
+//        ClientVO[] clientVOS = new ClientVO[clients.size()];
+        ClientPreviewVO[] clientPreviewVOS = new ClientPreviewVO[clients.size()];
+        for (int i=0;i<clients.size();i++){
+            // 设置客户模型
+            clientPreviewVOS[i].setClientVO(convertClientVoFromClient(clients.get(i)));
+            //查询出所有记录
+            List<Loan> loans = loanService.getLoansByClientId(clients.get(i).getId());
+
+
+        }
+        return new ClientPreviewVO[0];
+    }
+    // 从客户数据模型直接转到ClientVo
+    public ClientVO convertClientVoFromClient(Client client){
+        ClientVO clientVO = new ClientVO();
+        BeanUtils.copyProperties(client,clientVO);
+        String IDNmuber = client.getIdentityNumber();
+        if (IDNmuber.length()>5){
+            clientVO.setIdentityTailNumber(IDNmuber.substring(IDNmuber.length()-4,IDNmuber.length()));
+        }
+        clientVO.setAvatarUrl("");
+        return clientVO;
     }
 }

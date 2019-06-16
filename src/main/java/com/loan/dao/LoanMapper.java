@@ -2,6 +2,8 @@ package com.loan.dao;
 
 import com.loan.dataobject.Loan;
 
+import java.util.List;
+
 public interface LoanMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,6 @@ public interface LoanMapper {
     int updateByPrimaryKeySelective(Loan record);
 
     int updateByPrimaryKey(Loan record);
+    // 查询出客户的所有借入借出借款记录。
+    List<Loan> selectLoansByClientId(Integer clientId);
 }

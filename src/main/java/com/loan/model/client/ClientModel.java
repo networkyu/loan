@@ -8,7 +8,8 @@ public class ClientModel {
     private String name;
     @NotEmpty(message = "电话不能为空")
     private String tel;
-    @NotEmpty(message = "电子邮件不能为空")
+    // 电子邮箱可以为空。
+//    @NotEmpty(message = "电子邮件不能为空")
     private String eMail;
     @NotEmpty(message = "身份证号不能为空")
     private String identityNumber;

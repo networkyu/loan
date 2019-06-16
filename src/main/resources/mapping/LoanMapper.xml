@@ -23,6 +23,13 @@
     from loan
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <!--通过客户id查询客户最近的借出或借入记录-->
+  <select id="selectLoansByClientId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from loan
+    where lender = #{clientId,jdbcType=INTEGER} or borrower=#{clientId,jdbcType=INTEGER};
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from loan
     where id = #{id,jdbcType=INTEGER}

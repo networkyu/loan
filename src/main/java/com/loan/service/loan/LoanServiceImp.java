@@ -9,6 +9,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LoanServiceImp implements LoanService {
 
@@ -26,5 +28,11 @@ public class LoanServiceImp implements LoanService {
         Loan loan = new Loan();
         BeanUtils.copyProperties(loanModel,loan);
         return loan;
+    }
+
+    @Override
+    public List<Loan> getLoansByClientId(Integer clientId) {
+        List<Loan> loans = loanMapper.selectLoansByClientId(clientId);
+        return loans;
     }
 }
