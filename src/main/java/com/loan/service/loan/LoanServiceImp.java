@@ -197,7 +197,7 @@ public class LoanServiceImp implements LoanService {
                     period = period+1;
                 }
                 repayments.add(repayment);
-            }
+            } 
 //            每月还款额=贷款本金×[月利率×(1+月利率) ^ 还款月数]÷{[(1+月利率) ^ 还款月数]-1}
             Date firstDate = repayments.get(repayments.size() - 1).getTime();
             // 判断借款日期与第一期日期上月的天数,如果大于30天需要加利息，如果小于30天那么就业减本金。
