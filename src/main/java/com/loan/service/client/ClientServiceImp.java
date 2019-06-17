@@ -2,6 +2,7 @@ package com.loan.service.client;
 
 import com.loan.controller.client.viewobject.ClientPreviewVO;
 import com.loan.controller.client.viewobject.ClientVO;
+import com.loan.controller.loan.viewobjct.LoanView;
 import com.loan.dao.ClientMapper;
 import com.loan.dao.RepaymentIntegralMapper;
 import com.loan.dataobject.Client;
@@ -13,9 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 客户管理功能
@@ -145,7 +144,15 @@ public class ClientServiceImp implements ClientService {
             clientPreviewVOS[i].setClientVO(convertClientVoFromClient(clients.get(i)));
             //查询出所有记录
             List<Loan> loans = loanService.getLoansByClientId(clients.get(i).getId());
-
+            // 设置最新的一条借款记录
+            Loan loan = loans.get(loans.size() -1);
+            LoanView loanView = new LoanView();
+            loanView.setLoanId(loan.getId());
+            loanView.setBorrwoerName(clientMapper.selectName(loan.getBorrower()));
+            loanView.setLenderName(clientMapper.selectName(loan.getLender()));
+            loanView.setLoanTimeStr(loan.getBorrwwingTime());
+            loanView.setMoney(loan.getMoney());
+            clientPreviewVOS[i].setSimpleLoanView(loanView);
 
         }
         return new ClientPreviewVO[0];

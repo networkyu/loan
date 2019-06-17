@@ -14,4 +14,6 @@ public interface RepaymentMapper {
     int updateByPrimaryKeySelective(Repayment record);
 
     int updateByPrimaryKey(Repayment record);
+    /// 通过借款id获取该借款的所有还款
+    Repayment[] selectRepaymentsByLoanId(Integer loanId);
 }

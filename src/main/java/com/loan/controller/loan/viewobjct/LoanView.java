@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.math.BigDecimal;
+import java.util.Date;
+
 @Data
 @ToString
 public class LoanView {
@@ -16,7 +18,7 @@ public class LoanView {
     // 借款金额
     private BigDecimal money;
     // 借款时间
-    private String loanTimeStr;
+    private Date loanTimeStr;
 
     @Override
     public String toString() {
