@@ -34,13 +34,13 @@
   <select id="selectByMaxIdAndLimit" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     *
-    from client where id > #{arg0} limit #{arg1}
+    from client where id > #{maxId} limit #{limit}
   </select>
   <!--通过开始行后取limit条数据-->
   <select id="selectByStartRowAndLimit" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     *
-    from client limit #{arg0},#{arg1}
+    from client limit #{start},#{limit}
   </select>
   <!--查询用户总数-->
   <select id="selectCountId" resultType="java.lang.Integer">

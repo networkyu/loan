@@ -3,6 +3,7 @@ package com.loan.controller.client;
 import com.loan.controller.BaseController;
 import com.loan.controller.PaginationData;
 import com.loan.controller.client.viewobject.ClientPaginationVO;
+import com.loan.controller.client.viewobject.ClientPreviewVO;
 import com.loan.controller.client.viewobject.ClientVO;
 import com.loan.controller.client.viewobject.IntegralVO;
 import com.loan.error.BussinessException;
@@ -140,6 +141,9 @@ public class ClientController extends BaseController {
         // 需要返回的数据是ClientPreviewVO
         paginationData.setSum(total);
         paginationData.setPage(page);
+
+        ClientPreviewVO[] clientPreviewVOS = {};
+        paginationData.setObject(clientPreviewVOS);
         return CommonReturnType.create(paginationData);
     }
 

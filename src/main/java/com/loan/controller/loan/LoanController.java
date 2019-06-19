@@ -10,6 +10,7 @@ import com.loan.service.client.ClientService;
 import com.loan.service.loan.LoanService;
 import com.loan.validator.ValidationResult;
 import com.loan.validator.ValidatorImpl;
+import com.sun.org.glassfish.gmbal.ParameterNames;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -112,7 +113,16 @@ public class LoanController extends BaseController {
         result.put("loanInfoModelArr",loanInfoModels);
         return CommonReturnType.create(result);
     }
+    /**
+     * 通过借款id查询借款待还详情。
+     * 测试方法。
+     */
+    @RequestMapping(value = "/loanrepayment",method = {RequestMethod.GET})
+    @ResponseBody
+    public CommonReturnType getLoanRepayment(@RequestParam(name = "id") Integer id){
 
+        return CommonReturnType.create(loanService.getLoanRepayment(id));
+    }
 
 
 }
