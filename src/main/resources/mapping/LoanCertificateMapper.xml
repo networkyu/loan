@@ -33,6 +33,13 @@
     from loan_certificate
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <!--根据借款id获取借款凭证-->
+  <select id="selectByLoanId" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    from loan_certificate
+    where loan_id = #{loanId,jdbcType=INTEGER}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from loan_certificate
     where id = #{id,jdbcType=INTEGER}

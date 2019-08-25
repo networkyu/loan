@@ -19,6 +19,12 @@
     from repayment_certificate
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByRepaymentId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from repayment_certificate
+    where  repayment_id = #{RId,jdbcType=INTEGER}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from repayment_certificate
     where id = #{id,jdbcType=INTEGER}

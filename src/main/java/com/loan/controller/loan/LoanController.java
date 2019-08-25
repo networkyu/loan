@@ -1,13 +1,19 @@
 package com.loan.controller.loan;
 
 import com.loan.controller.BaseController;
+import com.loan.dataobject.LoanCertificate;
+import com.loan.dataobject.Repayment;
+import com.loan.dataobject.RepaymentCertificate;
 import com.loan.error.BussinessException;
 import com.loan.error.EmBussinessError;
 import com.loan.model.loan.LoanInfoModel;
 import com.loan.model.loan.LoanModel;
 import com.loan.response.CommonReturnType;
 import com.loan.service.client.ClientService;
+import com.loan.service.loan.LCertificateService;
 import com.loan.service.loan.LoanService;
+import com.loan.service.repayment.RCertificateService;
+import com.loan.service.repayment.RepaymentService;
 import com.loan.validator.ValidationResult;
 import com.loan.validator.ValidatorImpl;
 import com.sun.org.glassfish.gmbal.ParameterNames;
@@ -20,10 +26,7 @@ import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * 借款功能
@@ -42,6 +45,14 @@ public class LoanController extends BaseController {
 
     @Autowired
     private LoanService loanService;
+
+    @Autowired
+    private RepaymentService repaymentService;
+
+    @Autowired
+    private RCertificateService rCertificateService;
+    @Autowired
+    private LCertificateService lCertificateService;
     @RequestMapping(value = "/add",method = {RequestMethod.POST})
     @ResponseBody
     public CommonReturnType addLoan(@RequestParam(name ="lenderId") Integer lenderId,
@@ -117,12 +128,41 @@ public class LoanController extends BaseController {
      * 通过借款id查询借款待还详情。
      * 测试方法。
      */
-    @RequestMapping(value = "/loanrepayment",method = {RequestMethod.GET})
+    @RequestMapping(value = "/billdetails",method = {RequestMethod.GET})
     @ResponseBody
     public CommonReturnType getLoanRepayment(@RequestParam(name = "id") Integer id){
-
-        return CommonReturnType.create(loanService.getLoanRepayment(id));
+        Map<String,Object> result = new HashMap<>();
+        // 借款
+        LoanInfoModel loanInfoModel = loanService.convertFromLoan(loanService.getLoan(id));
+        result.put("loanInfoModel",loanInfoModel);
+        //应还款
+        List<Repayment> shouldRepayments = repaymentService.calNormalRepayments(loanService.convertFromLoanInfoModel(loanInfoModel));
+        result.put("shouldRepayment",shouldRepayments);
+        //已还款
+        Repayment[] repayments = repaymentService.getRepaymentsByLoanId(loanInfoModel.getId());
+        result.put("repayments",repayments);
+        // 有几个还款就有几个凭证（理论）
+        RepaymentCertificate[] rCers = new RepaymentCertificate[repayments.length];
+        for (int i = 0; i < rCers.length ; i++) {
+            rCers[i] = rCertificateService.getRCertificatesByRepaymentId(repayments[i].getId());
+        }
+        // 还款凭证
+        result.put("rCertification",rCers);
+        //借款凭证
+        LoanCertificate lCer = lCertificateService.getLCertificatesByLoanId(loanInfoModel.getId());
+        result.put("lCertification",lCer);
+        return CommonReturnType.create(result);
     }
-
+    /**
+     * 通过借款人姓名搜索未完成的贷款
+     */
+//    @RequestMapping(value = "/loans",method = {RequestMethod.GET})
+//    @ResponseBody
+//    public CommonReturnType getLoanByBorrwoerName(@RequestParam(name = "name") String name){
+//        return CommonReturnType.create(null);
+//    }
+    /**
+     * 通过借款id查询借款
+     */
 
 }

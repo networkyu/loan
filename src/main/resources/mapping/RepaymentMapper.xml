@@ -22,7 +22,7 @@
     select
     <include refid="Base_Column_List" />
     from repayment
-    where loanid = #{loanId,jdbcType=INTEGER}
+    where loanid = #{loanId,jdbcType=INTEGER} order by time
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from repayment

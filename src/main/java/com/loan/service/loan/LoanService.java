@@ -28,13 +28,32 @@ public interface LoanService {
 //     获取客户当前的生效借款
     public List<Loan> getEffectiveLoansByClientId(Integer clientId);
     // 通过一笔借款获取正常情况下应还款项目。
-    public List<Repayment> normalRepayments(Loan loan);
+//    public List<Repayment> normalRepayments(Loan loan);
     public Loan getLoan(Integer loanId);
     /**
      * 测试方法
      */
     // 通过客户ID获取应还款。
     public Map<String,Object> getLoanRepayment(Integer loanId);
+
+    /**
+     * 通过借款人姓名获取有效贷款
+     */
+    public LoanModel[] getLoanModelsByBorrowerName(String borrowerName);
+
+    /**
+     * 将loan转换为loanInfoModel
+     * @param loan
+     * @return
+     */
+    public LoanInfoModel convertFromLoan(Loan loan);
+
+    /**
+     * 将loanInfoModel转换为Loan
+     * @param loanInfoModel
+     * @return
+     */
+    Loan convertFromLoanInfoModel(LoanInfoModel loanInfoModel);
 
 
 

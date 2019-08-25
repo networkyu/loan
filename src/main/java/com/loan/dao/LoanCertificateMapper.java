@@ -10,6 +10,8 @@ public interface LoanCertificateMapper {
     int insertSelective(LoanCertificate record);
 
     LoanCertificate selectByPrimaryKey(Integer id);
+    // 根据借款id获取借款凭证
+    LoanCertificate selectByLoanId(Integer loanId);
 
     int updateByPrimaryKeySelective(LoanCertificate record);
 

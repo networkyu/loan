@@ -12,10 +12,20 @@ import java.util.Locale;
 
 @Service
 public class DateUtilServiceImp implements DateUtilService {
-    public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-    public static Calendar calendar = Calendar.getInstance(Locale.CHINA);
+    // 业务逻辑一期最小的天数。--非常重要
+    public static Integer MINPERIOD = 28;
+    public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public static Calendar calendar = Calendar.getInstance();
     public static Logger logger = LogManager.getLogger(DateUtilServiceImp.class);
 
+    // 构造方法。
+//
+//    public DateUtilServiceImp() {
+//        calendar.set(Calendar.HOUR_OF_DAY,0);
+//        calendar.set(Calendar.SECOND,0);
+//        calendar.set(Calendar.MINUTE,0);
+//        calendar.set(Calendar.MILLISECOND,0);
+//    }
 
     @Override
     public Date dateAddNumber(char type, Date date, Integer number) {
@@ -43,7 +53,24 @@ public class DateUtilServiceImp implements DateUtilService {
         cal.setTime(start);
         long time1 = cal.getTimeInMillis();
         cal.setTime(end);
-        long time2 = cal.getTimeInMillis();
+        long time2 = calendar.getTimeInMillis();
+        long between_days=(time2-time1)/(1000*3600*24);
+        return Integer.parseInt(String.valueOf(between_days));
+    }
+    @Override
+    public Integer intervalDay(Date start, Date end) {
+        calendar.setTime(start);
+        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.MILLISECOND,0);
+        long time1 = calendar.getTimeInMillis();
+        calendar.setTime(end);
+        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.MILLISECOND,0);
+        long time2 = calendar.getTimeInMillis();
         long between_days=(time2-time1)/(1000*3600*24);
         return Integer.parseInt(String.valueOf(between_days));
     }
@@ -57,8 +84,7 @@ public class DateUtilServiceImp implements DateUtilService {
         return date;
     }
     public String fromDate(Date date){
-        SimpleDateFormat printFormat = new SimpleDateFormat("yyyy年MM月dd日");
-        return printFormat.format(date);
+        return simpleDateFormat.format(date);
     }
 
     /**
@@ -85,5 +111,55 @@ public class DateUtilServiceImp implements DateUtilService {
 
         }
         return calendar.getTime();
+    }
+
+    /**
+     * 获得日期的日
+     * @param date
+     * @return
+     */
+    public Integer getDay(Date date){
+        calendar.setTime(date);
+        return calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    /**
+     * 通过开始日期和期限计算按月分期数
+     * @param start
+     * @param deadline
+     * @return
+     * 注意：28是本系统的业务逻辑，指的是当天数大于28天才可以计为一期。借款日是1月
+     * 20号，还款日是30号，那么第一期是在2月30号，如果在1月1号那么1月1号与1月30号有30天（包含1号，30号）
+     * 所以就是28
+     */
+    @Override
+    public Integer calPeriodBy(Date start, Integer deadline) {
+        //最后还款日期
+        Date endDate = dateAddNumber('d',start,deadline);
+        Integer period = 0;
+        // 大于等于28天计算一期
+        while (intervalDay(start,endDate) >= MINPERIOD){
+            // 自增1
+            period++;
+            endDate = dateAddNumber('m',endDate,-1);
+        }
+        return period;
+    }
+
+    /**
+     * 计算两个日期之间的天数
+     * @param start 开始日期
+     * @param end 结束日期
+     * @return 两个日期之间的间隔天数，如果开始日期在后，转换后的日期为负数。
+     *
+     * 原来的计算错误。
+     */
+    public Integer intervalDateSpare(Date start, Date end) {
+        calendar.setTime(start);
+        long time1 = calendar.getTimeInMillis();
+        calendar.setTime(end);
+        long time2 = calendar.getTimeInMillis();
+        long between_days=(time2-time1)/(1000*3600*24);
+        return Integer.parseInt(String.valueOf(between_days));
     }
 }

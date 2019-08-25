@@ -41,13 +41,20 @@
   <select id="selectLoansByStartRowAndLimit" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from loan limit #{param1},#{param2}
+    from loan order by repayment_day asc limit #{param1},#{param2}
   </select>
   <!--查询借款总条数-->
   <select id="selectCountId"  resultType="java.lang.Integer">
     select
     count(id)
     from loan
+  </select>
+  <!--通过借款人查询出有效的借款-->
+  <select id="selectLoansByBorrower" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from loan
+    where status='0' and borrower=#{clientId,jdbcType=INTEGER};
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from loan

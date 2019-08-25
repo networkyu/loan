@@ -26,5 +26,7 @@ public interface LoanMapper {
     // 查询出借款总条数
     // 通过select count(id)查询总条数。
     Integer selectCountId();
+    //通过借款人姓名返回有效的借款
+    List<Loan> selectLoansByBorrower(String borrowerName);
 
 }
