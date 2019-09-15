@@ -37,6 +37,13 @@
     from loan
     where status='0' and lender = #{clientId,jdbcType=INTEGER} or borrower=#{clientId,jdbcType=INTEGER};
   </select>
+  <!--通过客户id,还款日，查询还款日为参数的贷款-->
+  <select id="selectEffectiveLoansByClientIdAndRepaymentday" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from loan
+    where status='0' and and repayment_day =#{repaymentday,jdbcType=INTEGER} and lender = #{clientId,jdbcType=INTEGER} or borrower=#{clientId,jdbcType=INTEGER} ;
+  </select>
   <!--查询从开始行到限制条数的借款记录-->
   <select id="selectLoansByStartRowAndLimit" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select

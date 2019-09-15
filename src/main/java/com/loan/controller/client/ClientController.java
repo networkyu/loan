@@ -6,6 +6,7 @@ import com.loan.controller.client.viewobject.ClientPaginationVO;
 import com.loan.controller.client.viewobject.ClientPreviewVO;
 import com.loan.controller.client.viewobject.ClientVO;
 import com.loan.controller.client.viewobject.IntegralVO;
+import com.loan.dataobject.Client;
 import com.loan.error.BussinessException;
 import com.loan.error.EmBussinessError;
 import com.loan.model.client.ClientModel;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 客户管理功能
@@ -145,6 +148,13 @@ public class ClientController extends BaseController {
         ClientPreviewVO[] clientPreviewVOS = {};
         paginationData.setObject(clientPreviewVOS);
         return CommonReturnType.create(paginationData);
+    }
+    @RequestMapping(value = "clients",method = {RequestMethod.GET})
+    @ResponseBody
+    public CommonReturnType clientAll(){
+        List<Client> clients = clientService.selectAll();
+        CommonReturnType commonReturnType = CommonReturnType.create(clients);
+        return  commonReturnType;
     }
 
 

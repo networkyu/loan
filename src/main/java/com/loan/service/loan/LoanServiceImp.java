@@ -330,4 +330,17 @@ public class LoanServiceImp implements LoanService {
         }
         return BigDecimal.ZERO;
     }
+
+    @Override
+    public List<Loan> getLoanByRepaymentDayAndId(Integer day, Integer clientId) {
+        List<Loan> loans = loanMapper.selectEffectiveLoansByClientId(clientId);
+        ArrayList<Loan> result =  new ArrayList<Loan>();
+        for (int i =0 ;i < loans.size();i ++){
+            Loan loan = loans.get(i);
+           if (Integer.valueOf(loan.getRepaymentDay()) == day){
+               result.add(loan);
+           }
+        }
+        return result;
+    }
 }

@@ -4,6 +4,7 @@ import com.loan.dataobject.Loan;
 import com.loan.dataobject.Repayment;
 import com.loan.model.loan.LoanInfoModel;
 import com.loan.model.loan.LoanModel;
+import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -54,6 +55,10 @@ public interface LoanService {
      * @return
      */
     Loan convertFromLoanInfoModel(LoanInfoModel loanInfoModel);
+    /**
+     * 通过还款日，客户id查询有效贷款。
+     */
+    public List<Loan> getLoanByRepaymentDayAndId(Integer day, Integer clientId);
 
 
 

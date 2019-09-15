@@ -8,6 +8,7 @@ public enum EmBussinessError implements CommonError {
     USER_NOT_EXIST(20001,"用户不存在"),
     USER_LOGIN_FAILURE(20002,"用户登录失败，用户名或密码错误"),
     MODIFY_PASSWORD_FAILURE(20003,"修改失败，用户名或原密码错误"),
+    CAL_REPAYMENT_FAILURE(30001,"计算应还款失败"),
     ;
 
     private EmBussinessError(int errCode,String errMsg){

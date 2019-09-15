@@ -14,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -105,6 +106,12 @@ public class ClientServiceImp implements ClientService {
     public String getNameByClientId(Integer id) {
         return clientMapper.selectName(id);
     }
+
+    @Override
+    public List<Integer> getIdByName(String name) {
+        return clientMapper.selectIdByName(name);
+    }
+
     @Override
     public ClientModel[] getClientModelsLimitItem(Integer maxId,Integer limit) {
         List<Client> clients = clientMapper.selectByMaxIdAndLimit(maxId,limit);
@@ -167,5 +174,10 @@ public class ClientServiceImp implements ClientService {
         }
         clientVO.setAvatarUrl("");
         return clientVO;
+    }
+
+    @Override
+    public List<Client> selectAll() {
+        return clientMapper.selectAll();
     }
 }

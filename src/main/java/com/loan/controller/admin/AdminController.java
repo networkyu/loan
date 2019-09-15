@@ -12,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sun.misc.BASE64Encoder;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -54,14 +56,19 @@ public class AdminController extends BaseController {
         if (originalPassword.equals(newPassword)||newPassword==null||newPassword.isEmpty()){
             throw  new BussinessException(EmBussinessError.PARAMETER_VALIDATION_ERROR);
         }
+        if (!originalPassword.equals("cmccTTuijj090")){
+            throw  new BussinessException(EmBussinessError.MODIFY_PASSWORD_FAILURE);
+        }
         if (!adminService.changePassword(EncodeByMd5(originalPassword),EncodeByMd5(newPassword),account)){
             throw  new BussinessException(EmBussinessError.MODIFY_PASSWORD_FAILURE);
         }
         return CommonReturnType.create(null);
     }
     // 查看登录ip和登录时间
-    public void loginHistory(){
-
+    @RequestMapping(value = "/history",method = {RequestMethod.GET})
+    @ResponseBody
+    public String loginHistory(){
+        return this.httpServletRequest.getRemoteAddr();
     }
     // md5混淆
     public String EncodeByMd5(String str) throws NoSuchAlgorithmException,UnsupportedEncodingException {

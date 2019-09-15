@@ -19,5 +19,4 @@ public interface AdminPasswordMapper {
 
     int updateCiphertextByAdminId(String ciphertext,Integer adminId);
 
-
 }

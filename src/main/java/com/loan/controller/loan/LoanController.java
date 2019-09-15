@@ -1,6 +1,8 @@
 package com.loan.controller.loan;
 
 import com.loan.controller.BaseController;
+import com.loan.controller.loan.viewobjct.LoanView;
+import com.loan.dataobject.Loan;
 import com.loan.dataobject.LoanCertificate;
 import com.loan.dataobject.Repayment;
 import com.loan.dataobject.RepaymentCertificate;
@@ -10,6 +12,7 @@ import com.loan.model.loan.LoanInfoModel;
 import com.loan.model.loan.LoanModel;
 import com.loan.response.CommonReturnType;
 import com.loan.service.client.ClientService;
+import com.loan.service.dateutil.DateUtilService;
 import com.loan.service.loan.LCertificateService;
 import com.loan.service.loan.LoanService;
 import com.loan.service.repayment.RCertificateService;
@@ -17,6 +20,7 @@ import com.loan.service.repayment.RepaymentService;
 import com.loan.validator.ValidationResult;
 import com.loan.validator.ValidatorImpl;
 import com.sun.org.glassfish.gmbal.ParameterNames;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +38,7 @@ import java.util.*;
 @Controller
 @RequestMapping("/loan")
 @CrossOrigin(allowCredentials = "true",allowedHeaders = "*")
-public class LoanController extends BaseController {
+public class LoanController {
     // 创建一笔贷款
 
     @Autowired
@@ -53,6 +57,8 @@ public class LoanController extends BaseController {
     private RCertificateService rCertificateService;
     @Autowired
     private LCertificateService lCertificateService;
+    @Autowired
+    private DateUtilService dateUtilService;
     @RequestMapping(value = "/add",method = {RequestMethod.POST})
     @ResponseBody
     public CommonReturnType addLoan(@RequestParam(name ="lenderId") Integer lenderId,
@@ -154,13 +160,78 @@ public class LoanController extends BaseController {
         return CommonReturnType.create(result);
     }
     /**
-     * 通过借款人姓名搜索未完成的贷款
+     * 查看和俞连鹏（name）有关的今天的收款和还款
      */
-//    @RequestMapping(value = "/loans",method = {RequestMethod.GET})
-//    @ResponseBody
-//    public CommonReturnType getLoanByBorrwoerName(@RequestParam(name = "name") String name){
-//        return CommonReturnType.create(null);
-//    }
+    @RequestMapping(value = "/today",method = {RequestMethod.GET})
+    @ResponseBody
+    public CommonReturnType getLoanByName(@RequestParam(name = "name",required = false) String name,
+                                          @RequestParam(name = "day",required = false) String dayOfMonth) throws BussinessException {
+        // 请设置默认的客户号码
+        Integer clientId = 1;
+        if (name != null){
+            List<Integer> ids = clientService.getIdByName(name);
+            if (ids.size() > 0){
+                clientId = ids.get(0);
+            }
+        }
+        // 1.首先查询出所有还款日为今天的有效贷款。
+        Integer day = dateUtilService.getDay(new Date());
+        if (dayOfMonth != null){
+            day = Integer.valueOf(dayOfMonth);
+        }
+        List<Loan> loans = loanService.getLoanByRepaymentDayAndId(day,clientId);
+        // 2.计算出今天的应还款金额。
+        List<Repayment> shouldRs = new ArrayList<>();
+        for (Loan loan:loans){
+            List<Repayment> repayments = repaymentService.calNormalRepayments(loan);
+            for (Repayment repayment : repayments){
+                String time1 = dateUtilService.fromDate(repayment.getTime());
+                String now = dateUtilService.fromDate(new Date());
+                if (time1.equals(now)){
+                    // 如果是今天的还款那么就确定。
+                    shouldRs.add(repayment);
+                    break;//结束循环
+                }
+            }
+
+
+
+        }
+        if(shouldRs.size() != loans.size()){
+            throw new BussinessException(EmBussinessError.CAL_REPAYMENT_FAILURE);
+        }
+        // 收入
+        ArrayList<Object> receipt = new ArrayList<>();
+        // 支出
+        ArrayList<Object> repay = new ArrayList<>();
+        for (int i = 0;i<loans.size();i++){
+            Loan loan = loans.get(i);
+            LoanInfoModel loanInfoModel = loanService.convertFromLoan(loan);
+            Repayment repayment = shouldRs.get(i);
+            HashMap<String,String> today = new HashMap<>();
+            today.put("time",dateUtilService.fromDate(loan.getBorrwwingTime()));
+            today.put("money",loan.getMoney().toString());
+            today.put("pay",repayment.getMoney().toString());
+            today.put("type",loanInfoModel.getMethodDesc());
+            today.put("loanId",loanInfoModel.getId().toString());
+            // 如果出借人为默认客户那么就是收款，否则为还款。
+            if(loan.getLender() == clientId){
+                today.put("clientId",loan.getBorrower().toString());
+                today.put("name",loanInfoModel.getBorrowerName());
+                receipt.add(today);
+            } else {
+                today.put("clientId",loan.getLender().toString());
+                today.put("name",loanInfoModel.getLenderName());
+                repay.add(today);
+            }
+        }
+        // 3.计算出实际还款。
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("receipt",receipt);
+        result.put("pay",repay);
+        // 4.封装数据返回到前台。
+        return CommonReturnType.create(result);
+    }
     /**
      * 通过借款id查询借款
      */
